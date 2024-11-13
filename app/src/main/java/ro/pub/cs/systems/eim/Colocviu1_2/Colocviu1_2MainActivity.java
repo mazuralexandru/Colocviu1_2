@@ -102,4 +102,5 @@ public class Colocviu1_2MainActivity extends AppCompatActivity {
         Log.d(TAG, "MainActivity destroyed, stopping service");
         stopService(new Intent(this, Colocviu1_2Service.class));
     }
+
 }
