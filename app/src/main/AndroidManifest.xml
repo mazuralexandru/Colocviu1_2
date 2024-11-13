@@ -23,6 +23,7 @@
         <activity
             android:name=".Colocviu1_2SecondaryActivity"
             android:exported="false" />
+        <service android:name=".Colocviu1_2Service" android:exported="false" />
     </application>
 
 </manifest>

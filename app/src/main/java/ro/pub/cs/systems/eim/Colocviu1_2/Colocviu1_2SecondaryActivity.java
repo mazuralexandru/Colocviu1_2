@@ -7,6 +7,8 @@ import android.util.Log;
 
 public class Colocviu1_2SecondaryActivity extends Activity {
 
+    private static final String TAG = "Colocviu1_2SecondaryActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -17,10 +19,14 @@ public class Colocviu1_2SecondaryActivity extends Activity {
         if (allTerms != null && !allTerms.isEmpty()) {
             String[] terms = allTerms.split(" \\+ ");
             for (String term : terms) {
-                try {
-                    sum += Integer.parseInt(term);
-                } catch (NumberFormatException e) {
-                    Log.e("Colocviu1_2SecondaryActivity", "Invalid number format: " + term, e);
+                if (term.matches("\\d+")) { // Check if the term is a valid integer
+                    try {
+                        sum += Integer.parseInt(term);
+                    } catch (NumberFormatException e) {
+                        Log.e(TAG, "Invalid number format: " + term, e);
+                    }
+                } else {
+                    Log.e(TAG, "Invalid term: " + term);
                 }
             }
         }
@@ -28,6 +34,7 @@ public class Colocviu1_2SecondaryActivity extends Activity {
         Intent resultIntent = new Intent();
         resultIntent.putExtra("result", sum);
         setResult(RESULT_OK, resultIntent);
+        Log.d(TAG, "Sum calculated: " + sum);
         finish();
     }
 }

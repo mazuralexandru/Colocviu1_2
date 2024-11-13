@@ -3,6 +3,7 @@ package ro.pub.cs.systems.eim.Colocviu1_2;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class Colocviu1_2MainActivity extends AppCompatActivity {
 
+    private static final String TAG = "Colocviu1_2MainActivity";
     private EditText nextTermEditText;
     private TextView allTermsTextView;
     private Button addButton;
@@ -74,7 +76,15 @@ public class Colocviu1_2MainActivity extends AppCompatActivity {
         if (requestCode == 1 && resultCode == RESULT_OK) {
             lastComputedSum = data.getIntExtra("result", 0);
             lastTerms = allTermsTextView.getText().toString();
+            Log.d(TAG, "Computed sum: " + lastComputedSum);
             Toast.makeText(this, "Result: " + lastComputedSum, Toast.LENGTH_LONG).show();
+
+            if (lastComputedSum > 10) {
+                Intent serviceIntent = new Intent(this, Colocviu1_2Service.class);
+                serviceIntent.putExtra("sum", lastComputedSum);
+                startService(serviceIntent);
+                Log.d(TAG, "Service started with sum: " + lastComputedSum);
+            }
         }
     }
 
@@ -84,5 +94,12 @@ public class Colocviu1_2MainActivity extends AppCompatActivity {
         outState.putInt("lastComputedSum", lastComputedSum);
         outState.putString("lastTerms", lastTerms);
         outState.putString("allTermsTextView", allTermsTextView.getText().toString());
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "MainActivity destroyed, stopping service");
+        stopService(new Intent(this, Colocviu1_2Service.class));
     }
 }
